@@ -1,6 +1,6 @@
 class IPv4 {
   private _groups: number[] = []; //notacion decimal
-  public static readonly REGEXP = /^([1-5]{3})([0-5]{3})([0-5]{3})([0-5]{3})$/;
+  public static readonly REGEXP = /^([1-9]{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
 
   constructor(ipStr: string) {
 		this.ipStr = ipStr;
