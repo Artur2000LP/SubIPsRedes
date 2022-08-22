@@ -1,18 +1,23 @@
-import { exec } from "child_process";
-import IPv4 from "src/network/IPv4"
+import IPv4, { ClassIp } from "src/network/IPv4";
 
-describe("IPv4 class" , () => {
-	it("build with correct ip", () => {
-		const ipStr = "123.34.23.34";
-		const ip = new IPv4(ipStr);
-		expect(ipStr).toBe(ip.ipStr);
-	})
+describe("Instances of IPv4", () => {
+  it("they are valid ips", () => {
+    const arrayValidIp = ["123.34.23.34", "255.255.255.255", "1.0.0.0","20.0.3.2."];
+    arrayValidIp.forEach((ip) => expect(ip).toBeValidIp());
+  });
 
-	it("build with incorrect ip", () => {
-		const arrayOfIpInvalid = ["123.34.23.343","a.b.23.d","111.2.2","_.34.23.34"];
-		arrayOfIpInvalid.forEach(ipInvalid => {
-			expect(() => new IPv4(ipInvalid)).toThrow();
-		});
-	})
+  it("they are not valid ips", () => {
+    const arrayInvalidIp = ["123.040.01.03","123.000.000.000", "255.255.255.256", "0.0.0.0"];
+    arrayInvalidIp.forEach((invalidIp) => expect(invalidIp).not.toBeValidIp());
+  });
 
+  it("they are class A", () => {
+		const arrayClassAIP = ["20.23.30.20","127.255.255.255","1.0.0.0"];	
+		arrayClassAIP.forEach( ip => expect(ip).toBeClassIp(ClassIp.A));
+	});
+
+  it("they are class B", () => {
+		const arrayClassAIP = ["128.0.0.0","145.0.23.0","191.255.255.255"];	
+		arrayClassAIP.forEach( ip => expect(ip).toBeClassIp(ClassIp.B));
+	});
 });
