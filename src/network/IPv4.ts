@@ -1,24 +1,47 @@
+export enum ClassIp {
+  A = "A",
+  B = "B",
+  C = "C",
+	D = "D",
+	E = "E"
+}
+
 class IPv4 {
   private _groups: number[] = []; //notacion decimal
-  public static readonly REGEXP = /^([1-9]{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+  public static readonly REGEXP =
+    /^([1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})$/;
 
   constructor(ipStr: string) {
-		this.ipStr = ipStr;
+    this.ipStr = ipStr;
   }
 
-	public set ipStr(str : string){
-		const groups = str.match(IPv4.REGEXP);
-		if( !groups ) throw new Error("Invalid IP");
-		const [_, ...captures] = groups;
-		const groupsMatch = captures.map(capture => Number(capture));
-		if(groupsMatch.every(group => (group >= 0 && group <= 255)))
-			this._groups = groupsMatch;
-		else throw new Error("Invalid IP");
+  public set ipStr(str: string) {
+    const groups = str.match(IPv4.REGEXP);
+    if (!groups) throw new Error(`"${str} " is an Invalid IP`);
+    const [_, ...captures] = groups;
+    const groupsMatch = captures.map((capture) => Number(capture));
+    if (groupsMatch.every((group) => group >= 0 && group <= 255))
+      this._groups = groupsMatch;
+    else throw new Error(str.concat(" out of range"));
+  }
+
+  public get ipStr() {
+    return this._groups.join(".");
+  }
+
+	public get classIp() : ClassIp{
+		const groupOne = this._groups[0];
+		if(groupOne <= 127) return ClassIp.A;	
+		if(groupOne <= 191) return ClassIp.B
+		if(groupOne <= 223) return ClassIp.C; 
+		if(groupOne <= 239) return ClassIp.D; 
+		return ClassIp.E;
 	}
 
-	public get ipStr(){
-		return this._groups.join(".");
-	}
+  public get className() : string{
+    return this.classIp;
+  }
 }
 
 export default IPv4;
+
