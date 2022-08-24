@@ -1,5 +1,5 @@
 import expect from "expect";
-import IPv4, { ClassIp } from "src/network/IPv4";
+import IPv4, { ClassIp, Mask } from "src/network/IPv4";
 
 expect.extend({
 	toBeValidIp(strIp){
@@ -21,12 +21,26 @@ expect.extend({
 		const ip = new IPv4(received);
 		if(ip.classIp == expected)
 			return {
-				message: () => `it is expected that ${received} is not a Class A IP`,
+				message: () => `it is expected that ${received} is not a ${expected}`,
 				pass: true
 			}
 		return {
-			message: () => `${received} is expected to be a Class A IP`,
+			message: () => `${received} is expected to be a ${expected}`,
 			pass: false 
 		}
-	}
+	},
+
+  toBeMask(received: string, expected: Mask){
+    const ip = new IPv4(received);
+    if(ip.mask == expected)
+      return {
+        message: () => `it is expected that ${received} is not a Mask ${expected}`,
+        pass: true
+      }
+    else return {
+        message: () => `${received} is expected to be a ${expected}`,
+        pass: false
+    }
+  }
+
 });

@@ -4,6 +4,7 @@ declare global {
     interface Matchers<R> {
       toBeValidIp(): R;
 			toBeClassIp(classIp : ClassIp): R
+      toBeMask(mask: Mask): R
     }
   }
 }
