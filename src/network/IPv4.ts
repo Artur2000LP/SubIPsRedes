@@ -2,11 +2,9 @@ export enum ClassIp {
   A = "A",
   B = "B",
   C = "C",
-  D = "D",
-  E = "E"
 }
 
-export enum Mask{
+export enum Mask {
   A = "255.0.0.0",
   B = "255.255.0.0",
   C = "255.255.255.0"
@@ -21,7 +19,6 @@ class IPv4 {
 
   constructor(ipStr: string) {
     this.ipStr = ipStr;
-    //establecer la mascara
   }
 
   public set ipStr(str: string) {
@@ -42,22 +39,70 @@ class IPv4 {
     const groupOne = this._groups[0];
     if (groupOne <= 127) return ClassIp.A;
     if (groupOne <= 191) return ClassIp.B
-    if (groupOne <= 223) return ClassIp.C;
-    if (groupOne <= 239) return ClassIp.D;
-    return ClassIp.E;
+    return ClassIp.C;
   }
 
   public get className(): string {
     return this.classIp;
   }
 
-  public get mask(): string{
-    if(this.classIp == ClassIp.A) return Mask.A; 
-    if(this.classIp == ClassIp.B) return Mask.B; 
-    if(this.classIp == ClassIp.C) return Mask.C;
-    return "Desconocido";
-  } 
+  public get mask(): string {
+    if (this.classIp == ClassIp.A) return Mask.A;
+    if (this.classIp == ClassIp.B) return Mask.B;
+    return Mask.C;
+  }
 
+  public get idNetwork(): string {
+    if (this.classIp == ClassIp.A) return String(this._groups[0]);
+    if (this.classIp == ClassIp.B) return this._groups.slice(0, 2).join(".");
+    return this._groups.slice(0, 3).join(".");
+  }
+
+  public get idHost(): string {
+    if (this.classIp == ClassIp.A) return this._groups.slice(1).join(".");
+    if (this.classIp == ClassIp.B) return this._groups.slice(2).join(".");
+    return String(this._groups[3]);
+  }
+
+  public get ipNetwork(): string {
+    const idNetwork = this.idNetwork.split('.');
+    return [...idNetwork,...zeros(4 - idNetwork.length)].join(".");
+  }
+
+  public get ipHost(): string {
+    return this._groups.join(".");
+  }
+
+  public get numberOfNetworks(): number{
+    if(this.classIp === ClassIp.A) return 127;
+    if(this.classIp === ClassIp.B) return 64 * 256;
+    return 32 * 256 * 256;
+  }
+
+  public get numberOfIps(): number{
+    if(this.classIp === ClassIp.A) return 256 * 256 * 256;
+    if(this.classIp === ClassIp.B) return 256 * 256;
+    return 256;
+  }
+
+  public get numberOfConfigurbleIps(): number{
+    return this.numberOfIps - 2;
+  }
+
+  public get broadcast(): string{
+    const idNetwork = this.idNetwork;
+    if(this.classIp === ClassIp.A) return `${idNetwork}.255.255.255`;
+    if(this.classIp === ClassIp.B) return `${idNetwork}.255.255`;
+    return `${idNetwork}.255`;
+  }
+
+}
+
+//helpers functions
+function zeros(count: Number){
+  const arrayZeros = [];
+  for(let i = 0 ; i < count ; ++i) arrayZeros.push(0) 
+  return arrayZeros; 
 }
 
 export default IPv4;
