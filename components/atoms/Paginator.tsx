@@ -40,7 +40,7 @@ const Paginator = ({dispatch, pagination, max} : Props) => {
 
   const onLast : MouseEventHandler<HTMLButtonElement> = useCallback(() => {
     dispatch(max)
-  },[pagination])
+  },[pagination,max])
 
   const onInputNroSubNet : ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     if(e.target.value === "") return setNroSubNet(0)
