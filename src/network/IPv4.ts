@@ -96,6 +96,12 @@ class IPv4 {
     return `${idNetwork}.255`;
   }
 
+  public get bitsHost(): number{
+    if(this.classIp === ClassIp.A) return 24;
+    if(this.classIp === ClassIp.B) return 16;
+    return 8;
+  }
+
 }
 
 //helpers functions
