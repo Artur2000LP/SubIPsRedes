@@ -3,7 +3,6 @@ export enum ClassIp {
   B = "B",
   C = "C",
 }
-
 export enum Mask {
   A = "255.0.0.0",
   B = "255.255.0.0",
@@ -66,49 +65,49 @@ class IPv4 {
 
   public get ipNetwork(): string {
     const idNetwork = this.idNetwork.split('.');
-    return [...idNetwork,...zeros(4 - idNetwork.length)].join(".");
+    return [...idNetwork, ...zeros(4 - idNetwork.length)].join(".");
   }
 
   public get ipHost(): string {
     return this._groups.join(".");
   }
 
-  public get numberOfNetworks(): number{
-    if(this.classIp === ClassIp.A) return 127;
-    if(this.classIp === ClassIp.B) return 64 * 256;
+  public get numberOfNetworks(): number {
+    if (this.classIp === ClassIp.A) return 127;
+    if (this.classIp === ClassIp.B) return 64 * 256;
     return 32 * 256 * 256;
   }
 
-  public get numberOfIps(): number{
-    if(this.classIp === ClassIp.A) return 256 * 256 * 256;
-    if(this.classIp === ClassIp.B) return 256 * 256;
+  public get numberOfIps(): number {
+    if (this.classIp === ClassIp.A) return 256 * 256 * 256;
+    if (this.classIp === ClassIp.B) return 256 * 256;
     return 256;
   }
 
-  public get numberOfConfigurbleIps(): number{
+  public get numberOfConfigurbleIps(): number {
     return this.numberOfIps - 2;
   }
 
-  public get broadcast(): string{
+  public get broadcast(): string {
     const idNetwork = this.idNetwork;
-    if(this.classIp === ClassIp.A) return `${idNetwork}.255.255.255`;
-    if(this.classIp === ClassIp.B) return `${idNetwork}.255.255`;
+    if (this.classIp === ClassIp.A) return `${idNetwork}.255.255.255`;
+    if (this.classIp === ClassIp.B) return `${idNetwork}.255.255`;
     return `${idNetwork}.255`;
   }
 
-  public get bitsHost(): number{
-    if(this.classIp === ClassIp.A) return 24;
-    if(this.classIp === ClassIp.B) return 16;
+  public get bitsHost(): number {
+    if (this.classIp === ClassIp.A) return 24;
+    if (this.classIp === ClassIp.B) return 16;
     return 8;
   }
 
 }
 
 //helpers functions
-function zeros(count: Number){
+function zeros(count: Number) {
   const arrayZeros = [];
-  for(let i = 0 ; i < count ; ++i) arrayZeros.push(0) 
-  return arrayZeros; 
+  for (let i = 0; i < count; ++i) arrayZeros.push(0)
+  return arrayZeros;
 }
 
 export default IPv4;

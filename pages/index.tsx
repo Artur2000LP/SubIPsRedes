@@ -2,7 +2,7 @@ import AppIpInfo from "components/organism/AppIpInfo";
 import type { NextPage } from "next";
 import Head from "next/head";
 
-const Home: NextPage = () => {
+ const Home: NextPage = () => {
   return (
     <div className="h-auto">
       <Head>
